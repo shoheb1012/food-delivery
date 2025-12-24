@@ -1,8 +1,8 @@
-package com.example.repository;
+package com.fooddelivery.repository;
 
 
 
-import com.example.entity.FoodItem;
+import com.fooddelivery.entity.FoodItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

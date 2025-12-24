@@ -1,8 +1,8 @@
-package com.example.entity;
+package com.fooddelivery.entity;
 
 
 
-import com.example.enums.OrderStatus;
+import com.fooddelivery.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;

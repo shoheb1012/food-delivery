@@ -1,4 +1,4 @@
-package com.example.enums;
+package com.fooddelivery.enums;
 
 public enum OrderStatus {
 

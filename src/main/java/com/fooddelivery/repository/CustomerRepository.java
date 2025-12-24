@@ -1,7 +1,7 @@
-package com.example.repository;
+package com.fooddelivery.repository;
 
 
-import com.example.entity.Customer;
+import com.fooddelivery.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

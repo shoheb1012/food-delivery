@@ -16,6 +16,9 @@ public class Customer {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String password;
+
     @Column(unique = true,nullable = false)
     private String phone;
 
@@ -27,8 +30,5 @@ public class Customer {
     private Double longitude;
 
     private LocalDateTime createdA=LocalDateTime.now();
-
-
-
 
 }

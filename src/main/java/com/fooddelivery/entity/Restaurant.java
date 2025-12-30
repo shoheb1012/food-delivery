@@ -17,6 +17,9 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String password;
+
     private String phone;
 
     @Column(columnDefinition = "TEXT")

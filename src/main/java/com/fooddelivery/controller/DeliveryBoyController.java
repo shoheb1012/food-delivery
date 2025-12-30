@@ -1,8 +1,11 @@
 package com.fooddelivery.controller;
 
+import com.fooddelivery.dto.DeliveryBoyRegisterRequest;
 import com.fooddelivery.dto.LocationUpdateRequest;
 import com.fooddelivery.dto.DeliveryBoyLocationResponse;
+import com.fooddelivery.dto.LoginRequest;
 import com.fooddelivery.entity.DeliveryBoy;
+import com.fooddelivery.repository.DeliveryBoyRepository;
 import com.fooddelivery.service.DeliveryBoyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,38 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DeliveryBoyController {
 
+    private final DeliveryBoyRepository deliveryBoyRepository;
     private final DeliveryBoyService deliveryBoyService;
+
+    // REGISTER
+    @PostMapping("/register")
+    public ResponseEntity<DeliveryBoy> register(
+            @RequestBody DeliveryBoyRegisterRequest request) {
+
+        return ResponseEntity.ok(deliveryBoyService.register(request));
+    }
+
+
+    // LOGIN
+    @PostMapping("/login")
+    public ResponseEntity<DeliveryBoy> login(
+            @RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(deliveryBoyService.login(request));
+    }
+
+
+    // UPDATE VEHICLE DETAILS
+    @PutMapping("/{id}/vehicle")
+    public ResponseEntity<DeliveryBoy> updateVehicle(
+            @PathVariable Long id,
+            @RequestParam String vehicleNumber) {
+
+        return deliveryBoyRepository.findById(id).map(boy -> {
+            boy.setVehicleNumber(vehicleNumber);
+            return ResponseEntity.ok(deliveryBoyRepository.save(boy));
+        }).orElse(ResponseEntity.notFound().build());
+    }
 
     /**
      * Update delivery boy location (Called from Android app every 15 seconds)

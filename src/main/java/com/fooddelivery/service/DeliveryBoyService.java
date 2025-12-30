@@ -1,16 +1,19 @@
 package com.fooddelivery.service;
+import com.fooddelivery.dto.DeliveryBoyRegisterRequest;
+import com.fooddelivery.dto.LoginRequest;
 import com.fooddelivery.entity.DeliveryBoy;
 import com.fooddelivery.entity.LocationHistory;
 import com.fooddelivery.repository.DeliveryBoyRepository;
 import com.fooddelivery.repository.LocationHistoryRepository;
 import com.fooddelivery.util.LocationUtils;
+import com.fooddelivery.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,42 @@ public class DeliveryBoyService {
 
     private final DeliveryBoyRepository deliveryBoyRepository;
     private final LocationHistoryRepository locationHistoryRepository;
+
+    public DeliveryBoy register(DeliveryBoyRegisterRequest request) {
+
+        DeliveryBoy boy = new DeliveryBoy();
+        boy.setName(request.getName());
+        boy.setPhone(request.getPhone());
+
+        // 🔐 ENCRYPT PASSWORD
+        boy.setPassword(PasswordUtil.hash(request.getPassword()));
+
+        boy.setVehicleNumber(request.getVehicleNumber());
+        boy.setIsAvailable(true);
+
+        return deliveryBoyRepository.save(boy);
+    }
+
+    public DeliveryBoy login(LoginRequest request) {
+        DeliveryBoy boy = deliveryBoyRepository.findByPhone(request.getPhone())
+                .orElseThrow(() -> new RuntimeException("Invalid phone"));
+
+        if (!PasswordUtil.matches(request.getPassword(), boy.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return boy;
+    }
+
+
+
+    @Transactional
+    public void updateVehicle(Long id, String vehicleNumber) {
+        DeliveryBoy boy = deliveryBoyRepository.findById(id).orElseThrow();
+        boy.setVehicleNumber(vehicleNumber);
+        deliveryBoyRepository.save(boy);
+    }
+
 
     /**
      * Update delivery boy location (called every 15 seconds from Android app)
